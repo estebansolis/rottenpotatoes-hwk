@@ -1,4 +1,3 @@
--# Esteban Solis
 class MoviesController < ApplicationController
 
   def movie_params
@@ -66,7 +65,6 @@ class MoviesController < ApplicationController
   end
 
   def new
-    # default: render 'new' template
   end
 
   def create

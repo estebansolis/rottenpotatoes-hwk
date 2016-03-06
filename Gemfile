@@ -12,7 +12,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
-# Use Haml as the templating library
+# Use Haml as the templating libraryhttp://live.robinwidget.com/livestreams/free-live-video-streaming-ufc-196-mcgregor-diaz-other-fighting-267028.html
 gem 'haml'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
