@@ -1,3 +1,4 @@
+-# Esteban Solis
 class MoviesController < ApplicationController
 
   def movie_params
@@ -11,7 +12,57 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    needs_redirect = false
+    redirect_params = Hash.new
+    if params["title"]
+      redirect_params["title"] = true
+      @movies = Movie.order(:title)
+      session["title"] = true
+      session["release_date"] = false
+    elsif params["release_date"]
+      redirect_params["release_date"] = true
+      @movies = Movie.order(:release_date)
+      session["title"] = false
+      session["release_date"] = true
+    elsif session["title"]
+      needs_redirect = true
+      redirect_params["title"] = true
+      session["title"] = true
+      session["release_date"] = false
+    elsif session["release_date"]
+      needs_redirect = true
+      redirect_params["release_date"] = true
+      session["title"] = false
+      session["release_date"] = true
+    else
+      @movies = Movie.all
+    end
+    @all_ratings = Movie.get_ratings
+    @param_ratings = @all_ratings.select do |rating|
+        params["rating_"+rating]
+      end
+    if not @param_ratings.empty?
+      @all_ratings.each do |rating|
+        session["rating_"+rating] = params["rating_"+rating]
+      end
+    else 
+      needs_redirect = true
+    end
+    @selected_ratings = @all_ratings.select do |rating|
+      session["rating_"+rating]
+    end
+    if(@selected_ratings.empty?)
+      needs_redirect = true
+      @selected_ratings = @all_ratings
+    end
+    @selected_ratings.each do |rating|
+      redirect_params["rating_"+rating] = true
+    end
+    if needs_redirect
+      redirect_to movies_path(redirect_params)
+    else
+      @movies = @movies.where("rating IN (?)", @selected_ratings)
+    end
   end
 
   def new
